@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CalcPay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-zinc-950">
+    <div
+      class="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-6"
+      style="font-family: ui-sans-serif, system-ui, -apple-system, sans-serif"
+    >
+      <div class="w-full max-w-xs">
+        <div class="mb-4 px-2">
+          <div id="expression" class="text-zinc-600 text-sm h-5 tabular-nums text-right"></div>
+          <div id="display" class="text-right text-5xl font-light tabular-nums truncate mt-1 transition-colors text-white">0</div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-2" id="buttons"></div>
+
+        <div class="mt-4 flex justify-between text-[11px] text-zinc-600 px-1">
+          <span id="spent">$0.00 spent</span>
+          <span id="count">0 calcs</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="paywall" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div class="bg-zinc-900 border border-zinc-800 rounded-2xl max-w-sm w-full p-7 shadow-2xl">
+        <div class="text-xs text-zinc-500 uppercase tracking-widest mb-5">CalcPay Checkout</div>
+
+        <div id="paywall-expression" class="bg-zinc-950 rounded-xl px-4 py-3 mb-6 font-mono text-sm text-zinc-400"></div>
+
+        <div class="space-y-2 text-sm mb-6">
+          <div class="flex justify-between text-zinc-400"><span>Calculation result</span><span>$0.35</span></div>
+          <div class="flex justify-between text-zinc-600 text-xs"><span>Mathematical processing</span><span>$0.00</span></div>
+          <div class="flex justify-between font-medium text-white pt-2 border-t border-zinc-800"><span>Total</span><span>$0.35</span></div>
+        </div>
+
+        <button id="pay-btn" class="w-full bg-white text-zinc-900 py-2.5 rounded-xl font-medium text-sm hover:bg-zinc-100 disabled:opacity-50 transition-all mb-2">Pay $0.35</button>
+        <button id="cancel-btn" class="w-full text-zinc-600 hover:text-zinc-300 text-xs py-2 transition-colors">Remain ignorant (free)</button>
+        <p id="pay-error" class="text-red-400 text-xs mt-2 hidden"></p>
+      </div>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
