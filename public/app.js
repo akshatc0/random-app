@@ -1,4 +1,4 @@
-const PRICE = 0.35;
+const PRICE = 0.85;
 
 const state = {
   display: "0",
