@@ -385,6 +385,7 @@ function finalizePaidAction(pending) {
     cPaid = true;
     cSpent = +(cSpent + amount).toFixed(2);
     cCount++;
+    showPage("calcpay");
     calcRender();
     return;
   }
@@ -396,6 +397,7 @@ function finalizePaidAction(pending) {
     tCount++;
     document.getElementById("time-spent").textContent = "$" + tSpent.toFixed(2) + " spent";
     document.getElementById("time-count").textContent = tCount + " reveal" + (tCount !== 1 ? "s" : "");
+    showPage("timepay");
     return;
   }
 
@@ -406,6 +408,7 @@ function finalizePaidAction(pending) {
     wSpent = +(wSpent + amount).toFixed(2);
     wCount++;
     updateWeatherStats();
+    showPage("weatherpay");
     return;
   }
 
@@ -415,6 +418,7 @@ function finalizePaidAction(pending) {
     wSpent = +(wSpent + amount).toFixed(2);
     wCount += 5;
     updateWeatherStats();
+    showPage("weatherpay");
     return;
   }
 
@@ -424,6 +428,7 @@ function finalizePaidAction(pending) {
     wSpent = +(wSpent + amount).toFixed(2);
     wCount++;
     updateWeatherStats();
+    showPage("weatherpay");
     return;
   }
 
@@ -435,6 +440,7 @@ function finalizePaidAction(pending) {
     pwCount++;
     document.getElementById("pw-spent").textContent = "$" + pwSpent.toFixed(2) + " spent";
     document.getElementById("pw-count").textContent = pwCount + " reveal" + (pwCount !== 1 ? "s" : "");
+    showPage("passwordpay");
     return;
   }
 
@@ -446,6 +452,7 @@ function finalizePaidAction(pending) {
     coinCount++;
     document.getElementById("coin-spent").textContent = "$" + coinSpent.toFixed(2) + " spent";
     document.getElementById("coin-count").textContent = coinCount + " flip" + (coinCount !== 1 ? "s" : "") + " revealed";
+    showPage("coinflip");
     return;
   }
 
@@ -457,6 +464,7 @@ function finalizePaidAction(pending) {
     sortCount++;
     document.getElementById("sort-spent").textContent = "$" + sortSpent.toFixed(2) + " spent";
     document.getElementById("sort-count2").textContent = sortCount + " sort" + (sortCount !== 1 ? "s" : "");
+    showPage("sortpay");
   }
 }
 
