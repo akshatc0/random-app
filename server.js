@@ -5,7 +5,7 @@ const { URL } = require("url");
 
 const PORT = process.env.PORT || 3000;
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || "";
-const PRICE_CENTS = 35;
+const PRICE_CENTS = 85;
 const CURRENCY = "usd";
 
 function sendJson(res, statusCode, data) {
