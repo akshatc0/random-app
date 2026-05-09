@@ -65,7 +65,7 @@ function render() {
 
   payBtn.disabled = state.processing;
   cancelBtn.disabled = state.processing;
-  payBtn.textContent = state.processing ? "Redirecting..." : "Pay $0.35";
+  payBtn.textContent = state.processing ? "Redirecting..." : "Pay $0.85";
 }
 
 function inputDigit(digit) {
