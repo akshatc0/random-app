@@ -601,6 +601,136 @@ function sortPay() {
   });
 }
 
+function activePageId() {
+  const el = document.querySelector(".page.active");
+  return el ? el.id : "home";
+}
+
+function isTextInput(target) {
+  if (!target) return false;
+  const tag = target.tagName;
+  return tag === "INPUT" || tag === "TEXTAREA" || target.isContentEditable;
+}
+
+window.addEventListener("keydown", (event) => {
+  const modalOpen = document.getElementById("modal").classList.contains("open");
+  const key = event.key;
+
+  if (modalOpen) {
+    if (key === "Enter") {
+      event.preventDefault();
+      modalPay(false);
+      return;
+    }
+    if (key.toLowerCase() === "l") {
+      event.preventDefault();
+      modalPay(true);
+      return;
+    }
+    if (key === "Escape" || key.toLowerCase() === "n") {
+      event.preventDefault();
+      modalClose();
+      return;
+    }
+  }
+
+  const page = activePageId();
+  const inTextInput = isTextInput(event.target);
+
+  if (page === "home") {
+    const pageMap = {
+      "1": "calcpay",
+      "2": "timepay",
+      "3": "weatherpay",
+      "4": "passwordpay",
+      "5": "coinflip",
+      "6": "sortpay",
+      c: "calcpay",
+      t: "timepay",
+      w: "weatherpay",
+      p: "passwordpay",
+      f: "coinflip",
+      s: "sortpay",
+    };
+    const targetPage = pageMap[key.toLowerCase()];
+    if (targetPage) {
+      event.preventDefault();
+      showPage(targetPage);
+      return;
+    }
+  }
+
+  if (key === "Escape" && page !== "home") {
+    event.preventDefault();
+    showPage("home");
+    return;
+  }
+
+  if (page === "calcpay" && !inTextInput) {
+    const digit = Number(key);
+    if (Number.isInteger(digit) && digit >= 0 && digit <= 9) {
+      event.preventDefault();
+      calcDigit(digit);
+      return;
+    }
+    if (key === ".") { event.preventDefault(); calcDot(); return; }
+    if (key === "+" || key === "-") { event.preventDefault(); calcOp(key); return; }
+    if (key === "*" || key.toLowerCase() === "x") { event.preventDefault(); calcOp("×"); return; }
+    if (key === "/") { event.preventDefault(); calcOp("÷"); return; }
+    if (key === "Enter" || key === "=") { event.preventDefault(); calcEquals(); return; }
+    if (key.toLowerCase() === "c") { event.preventDefault(); calcClear(); return; }
+    if (key === "Backspace") {
+      event.preventDefault();
+      if (!cWait && !cPaid) {
+        cDisp = cDisp.length <= 1 ? "0" : cDisp.slice(0, -1);
+        calcRender();
+      }
+      return;
+    }
+  }
+
+  if (page === "timepay" && !inTextInput) {
+    if (key === "1" || key.toLowerCase() === "t") { event.preventDefault(); timePay("time"); return; }
+    if (key === "2" || key.toLowerCase() === "s") { event.preventDefault(); timePay("seconds"); return; }
+    if (key === "3" || key.toLowerCase() === "d") { event.preventDefault(); timePay("date"); return; }
+  }
+
+  if (page === "weatherpay" && !inTextInput) {
+    if (key.toLowerCase() === "u") { event.preventDefault(); weatherPay("umbrella"); return; }
+    if (key.toLowerCase() === "a") { event.preventDefault(); weatherPay("all"); return; }
+    if (["1", "2", "3", "4", "5"].includes(key)) {
+      const idx = Number(key) - 1;
+      if (!wUnlocked[idx]) {
+        event.preventDefault();
+        weatherPay(idx);
+      }
+      return;
+    }
+  }
+
+  if (page === "passwordpay" && !inTextInput) {
+    if (key.toLowerCase() === "g") { event.preventDefault(); pwGenerate(); return; }
+    if (key.toLowerCase() === "r") { event.preventDefault(); pwPay(); return; }
+  }
+
+  if (page === "coinflip" && !inTextInput) {
+    if (key.toLowerCase() === "f") { event.preventDefault(); coinFlip(); return; }
+    if (key.toLowerCase() === "r") { event.preventDefault(); coinPay(); return; }
+  }
+
+  if (page === "sortpay") {
+    if (!inTextInput && key.toLowerCase() === "r") {
+      event.preventDefault();
+      sortPreview();
+      return;
+    }
+    if ((event.metaKey || event.ctrlKey) && key === "Enter") {
+      event.preventDefault();
+      sortPay();
+    }
+  }
+});
+
 pwGenerate();
 buildWeather();
 calcRender();
