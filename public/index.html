@@ -12,7 +12,7 @@
 
   nav{display:none;}
   .page{display:none;min-height:100vh;padding-top:0;}
-  .page.active{display:flex;flex-direction:column;}
+  .page.active{display:flex;flex-direction:column;align-items:center;}
 
   #home{align-items:center;justify-content:center;}
   .home-inner{width:100%;max-width:420px;padding:40px 24px;}
@@ -28,7 +28,7 @@
   .nav-list li:hover .nav-item-name .btm{transform:translateY(0);}
   .nav-item-idx{display:none;}
 
-  .product-page{align-items:center;justify-content:center;flex:1;}
+  .product-page{display:flex;align-items:center;justify-content:center;flex:1;width:100%;}
   .product-wrap{width:100%;max-width:360px;padding:24px;}
   .product-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:32px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;}
   .product-label:hover{color:var(--fg);}
@@ -62,6 +62,9 @@
   .modal-pay{width:100%;background:#fff;color:#000;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;margin-top:20px;transition:background .2s;}
   .modal-pay:hover{background:#ddd;}
   .modal-pay:disabled{opacity:.5;cursor:default;}
+  .modal-lucky{width:100%;background:#161616;color:#fff;border:1px solid #2a2a2a;border-radius:12px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;transition:background .2s;}
+  .modal-lucky:hover{background:#202020;}
+  .modal-lucky:disabled{opacity:.5;cursor:default;}
   .modal-cancel{width:100%;background:none;border:none;color:#555;font-size:12px;padding:10px;cursor:pointer;margin-top:4px;transition:color .2s;}
   .modal-cancel:hover{color:#fff;}
   .modal-fine{font-size:10px;color:#333;text-align:center;margin-top:16px;padding-top:14px;border-top:1px solid #1a1a1a;}
@@ -125,7 +128,7 @@
     <div class="product-wrap">
       <div class="product-label" onclick="showPage('home')">← expensive.solutions</div>
       <div class="product-title">CalcPay</div>
-      <div class="product-sub">Pay $0.35 per calculation result. Math is a service.</div>
+      <div class="product-sub">Pay $0.99 per calculation result. Math is a service.</div>
       <div class="card">
         <div class="display">
           <div class="display-sub" id="calc-sub"></div>
@@ -163,15 +166,15 @@
     <div class="product-wrap">
       <div class="product-label" onclick="showPage('home')">← expensive.solutions</div>
       <div class="product-title">TimePay</div>
-      <div class="product-sub">The clock is free. Knowing what time it is costs $0.55. Seconds cost extra.</div>
+      <div class="product-sub">The clock is free. Knowing what time it is costs $0.99.</div>
       <div class="card">
         <div class="display">
           <div class="display-sub">current time</div>
           <div class="display-main" id="time-display" style="font-size:32px">--:-- --</div>
         </div>
-        <button class="btn btn-action" style="width:100%;margin-bottom:8px;" onclick="timePay('time')">Reveal time — $0.55</button>
-        <button class="btn btn-muted" style="width:100%;margin-bottom:8px;" onclick="timePay('seconds')">+ Include seconds — $0.25 extra</button>
-        <button class="btn btn-muted" style="width:100%;" onclick="timePay('date')">Reveal today's date — $0.40</button>
+        <button class="btn btn-action" style="width:100%;margin-bottom:8px;" onclick="timePay('time')">Reveal time — $0.99</button>
+        <button class="btn btn-muted" style="width:100%;margin-bottom:8px;" onclick="timePay('seconds')">Reveal time + seconds — $0.99</button>
+        <button class="btn btn-muted" style="width:100%;" onclick="timePay('date')">Reveal today's date — $0.99</button>
         <div class="footer-stat"><span id="time-spent">$0.00 spent</span><span id="time-count">0 reveals</span></div>
       </div>
     </div>
@@ -183,15 +186,15 @@
     <div class="product-wrap">
       <div class="product-label" onclick="showPage('home')">← expensive.solutions</div>
       <div class="product-title">WeatherPay</div>
-      <div class="product-sub">Each day of forecast costs $0.50. Knowing whether to bring an umbrella: $0.49.</div>
+      <div class="product-sub">Forecast answers cost $0.99 each. Bring umbrella answer: $0.99.</div>
       <div class="card">
         <div class="umbrella-card">
           <div style="font-size:13px;color:#888;">Bring an umbrella?</div>
           <div class="umbrella-answer" id="umbrella-answer">Yes ☔</div>
-          <button class="btn btn-action" style="padding:8px 14px;height:auto;font-size:12px;" onclick="weatherPay('umbrella')">$0.49</button>
+          <button class="btn btn-action" style="padding:8px 14px;height:auto;font-size:12px;" onclick="weatherPay('umbrella')">$0.99</button>
         </div>
         <div class="weather-days" id="weather-days"></div>
-        <button class="btn btn-action" style="width:100%;" onclick="weatherPay('all')">Unlock all 5 days — $2.50</button>
+        <button class="btn btn-action" style="width:100%;" onclick="weatherPay('all')">Unlock all 5 days — $0.99</button>
         <div class="footer-stat"><span id="weather-spent">$0.00 spent</span><span id="weather-count">0 unlocks</span></div>
       </div>
     </div>
@@ -203,12 +206,12 @@
     <div class="product-wrap">
       <div class="product-label" onclick="showPage('home')">← expensive.solutions</div>
       <div class="product-title">PasswordPay</div>
-      <div class="product-sub">We generate a secure password. Revealing it costs $0.50. Free tier: ••••••••</div>
+      <div class="product-sub">We generate a secure password. Revealing it costs $0.99. Free tier: ••••••••</div>
       <div class="card">
         <div class="pw-display blurred" id="pw-display">••••••••••••</div>
         <div class="pw-strength" id="pw-strength"></div>
         <button class="btn btn-muted" style="width:100%;margin-bottom:8px;" onclick="pwGenerate()">Generate new password (free)</button>
-        <button class="btn btn-action" style="width:100%;" onclick="pwPay()">Reveal password — $0.50</button>
+        <button class="btn btn-action" style="width:100%;" onclick="pwPay()">Reveal password — $0.99</button>
         <div class="footer-stat"><span id="pw-spent">$0.00 spent</span><span id="pw-count">0 reveals</span></div>
       </div>
     </div>
@@ -220,13 +223,13 @@
     <div class="product-wrap">
       <div class="product-label" onclick="showPage('home')">← expensive.solutions</div>
       <div class="product-title">CoinFlip Pro</div>
-      <div class="product-sub">The flip is free. The result costs $0.10. Heads or tails has real value.</div>
+      <div class="product-sub">The flip is free. The result costs $0.99. Heads or tails has real value.</div>
       <div class="card">
         <div class="coin" id="coin">🪙</div>
         <div class="coin-result-blur" id="coin-result" style="filter:blur(6px)">?</div>
         <div style="font-size:11px;color:#444;text-align:center;margin-bottom:20px;">result hidden until payment</div>
         <button class="btn btn-muted" style="width:100%;margin-bottom:8px;" onclick="coinFlip()">Flip coin (free)</button>
-        <button class="btn btn-action" style="width:100%;" onclick="coinPay()">Reveal result — $0.10</button>
+        <button class="btn btn-action" style="width:100%;" onclick="coinPay()">Reveal result — $0.99</button>
         <div class="footer-stat"><span id="coin-spent">$0.00 spent</span><span id="coin-count">0 flips revealed</span></div>
       </div>
     </div>
@@ -238,12 +241,12 @@
     <div class="product-wrap">
       <div class="product-label" onclick="showPage('home')">← expensive.solutions</div>
       <div class="product-title">SortPay</div>
-      <div class="product-sub">$0.05 per item sorted. Minimum 10 items ($0.50). Results blurred until payment.</div>
+      <div class="product-sub">Sort your list alphabetically for $0.99. Results stay blurred until payment.</div>
       <div class="card">
         <textarea id="sort-input" placeholder="Paste your list here, one item per line..." oninput="sortPreview()"></textarea>
-        <div class="sort-count" id="sort-count" style="margin-top:8px;">0 items · $0.50 (min $0.50)</div>
+        <div class="sort-count" id="sort-count" style="margin-top:8px;">0 items · Flat $0.99</div>
         <div class="sort-preview blurred" id="sort-preview">Your sorted list will appear here.</div>
-        <button class="btn btn-action" style="width:100%;" onclick="sortPay()">Sort & reveal — <span id="sort-price">$0.50</span></button>
+        <button class="btn btn-action" style="width:100%;" onclick="sortPay()">Sort & reveal — <span id="sort-price">$0.99</span></button>
         <div class="footer-stat"><span id="sort-spent">$0.00 spent</span><span id="sort-count2">0 sorts</span></div>
       </div>
     </div>
@@ -257,205 +260,344 @@
     <div class="modal-row"><span id="modal-item">Item</span><span id="modal-price">$0.00</span></div>
     <div class="modal-row" style="font-size:11px;"><span>Processing fee</span><span>$0.00</span></div>
     <div class="modal-row total"><span>Total</span><span id="modal-total">$0.00</span></div>
-    <button class="modal-pay" id="modal-pay-btn" onclick="modalPay()">Pay now</button>
+    <button class="modal-pay" id="modal-pay-btn" onclick="modalPay(false)">Pay now</button>
+    <button class="modal-lucky" id="modal-lucky-btn" onclick="modalPay(true)">I'm feeling lucky</button>
     <button class="modal-cancel" onclick="modalClose()">Remain ignorant (free)</button>
     <div class="modal-fine">By proceeding, you acknowledge that this information has value.</div>
   </div>
 </div>
 
 <script>
+const DEFAULT_PRICE = 0.99;
+const MIN_LUCKY = 0.99;
+const MAX_LUCKY = 9.99;
+const PENDING_KEY = "expensive_solutions_pending_purchase";
+let pendingPurchase = null;
+
 function showPage(id) {
-  document.querySelectorAll('.page').forEach((p) => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
   window.scrollTo(0, 0);
 }
 
-let modalCallback = null;
-function openModal(preview, item, price, cb) {
-  document.getElementById('modal-preview').innerHTML = preview;
-  document.getElementById('modal-item').textContent = item;
-  document.getElementById('modal-price').textContent = '$' + price.toFixed(2);
-  document.getElementById('modal-total').textContent = '$' + price.toFixed(2);
-  document.getElementById('modal-pay-btn').textContent = 'Pay $' + price.toFixed(2);
-  document.getElementById('modal-pay-btn').disabled = false;
-  modalCallback = cb;
-  document.getElementById('modal').classList.add('open');
-}
-function modalClose() { document.getElementById('modal').classList.remove('open'); }
-function modalPay() {
-  const btn = document.getElementById('modal-pay-btn');
-  btn.disabled = true;
-  btn.textContent = 'Processing...';
-  setTimeout(() => { modalClose(); if (modalCallback) modalCallback(); }, 1400);
+function dollarsToCents(amount) {
+  return Math.round(Number(amount) * 100);
 }
 
-let cDisp = '0', cPrev = null, cOp = null, cWait = false, cPaid = false, cSpent = 0, cCount = 0;
+function centsToDollars(cents) {
+  return (cents / 100).toFixed(2);
+}
+
+function randomLuckyAmount() {
+  const cents = Math.floor(MIN_LUCKY * 100 + Math.random() * ((MAX_LUCKY * 100) - (MIN_LUCKY * 100) + 1));
+  return +(cents / 100).toFixed(2);
+}
+
+function openModal(preview, item, price, payload) {
+  pendingPurchase = { item, price, payload };
+  document.getElementById("modal-preview").innerHTML = preview;
+  document.getElementById("modal-item").textContent = item;
+  document.getElementById("modal-price").textContent = "$" + price.toFixed(2);
+  document.getElementById("modal-total").textContent = "$" + price.toFixed(2);
+  document.getElementById("modal-pay-btn").textContent = "Pay $" + price.toFixed(2);
+  document.getElementById("modal-pay-btn").disabled = false;
+  document.getElementById("modal-lucky-btn").disabled = false;
+  document.getElementById("modal").classList.add("open");
+}
+
+function modalClose() {
+  document.getElementById("modal").classList.remove("open");
+}
+
+async function modalPay(useLuckyPrice) {
+  if (!pendingPurchase) return;
+  const payBtn = document.getElementById("modal-pay-btn");
+  const luckyBtn = document.getElementById("modal-lucky-btn");
+  const amount = useLuckyPrice ? randomLuckyAmount() : pendingPurchase.price;
+
+  payBtn.disabled = true;
+  luckyBtn.disabled = true;
+  payBtn.textContent = "Redirecting...";
+
+  try {
+    const response = await fetch("/api/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        item_name: pendingPurchase.item,
+        amount_cents: dollarsToCents(amount),
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok || !data.url) {
+      throw new Error(data.error || "Unable to create Stripe checkout session.");
+    }
+
+    sessionStorage.setItem(PENDING_KEY, JSON.stringify({
+      amount,
+      payload: pendingPurchase.payload,
+    }));
+    window.location.href = data.url;
+  } catch (error) {
+    payBtn.disabled = false;
+    luckyBtn.disabled = false;
+    payBtn.textContent = "Pay $" + pendingPurchase.price.toFixed(2);
+    alert(error.message || "Checkout failed.");
+  }
+}
+
+async function applyPaidPurchaseFromReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const paid = params.get("paid");
+  const sessionId = params.get("session_id");
+  if (paid !== "1" || !sessionId) return;
+
+  const rawPending = sessionStorage.getItem(PENDING_KEY);
+  if (!rawPending) return;
+
+  try {
+    const statusResponse = await fetch(`/api/checkout-session-status?session_id=${encodeURIComponent(sessionId)}`);
+    const statusData = await statusResponse.json();
+    if (!statusResponse.ok || !statusData.paid) return;
+
+    const pending = JSON.parse(rawPending);
+    finalizePaidAction(pending);
+    sessionStorage.removeItem(PENDING_KEY);
+    window.history.replaceState({}, "", window.location.pathname);
+  } catch {
+    // Keep pending item if verification fails.
+  }
+}
+
+function finalizePaidAction(pending) {
+  const amount = +Number(pending.amount || DEFAULT_PRICE).toFixed(2);
+  const payload = pending.payload || {};
+
+  if (payload.type === "calc") {
+    cDisp = String(payload.result);
+    cPrev = null;
+    cOp = null;
+    cWait = true;
+    cPaid = true;
+    cSpent = +(cSpent + amount).toFixed(2);
+    cCount++;
+    calcRender();
+    return;
+  }
+
+  if (payload.type === "time") {
+    document.getElementById("time-display").textContent = payload.result || "--:-- --";
+    document.getElementById("time-display").className = "display-main revealed";
+    tSpent = +(tSpent + amount).toFixed(2);
+    tCount++;
+    document.getElementById("time-spent").textContent = "$" + tSpent.toFixed(2) + " spent";
+    document.getElementById("time-count").textContent = tCount + " reveal" + (tCount !== 1 ? "s" : "");
+    return;
+  }
+
+  if (payload.type === "weather_umbrella") {
+    const el = document.getElementById("umbrella-answer");
+    el.className = "umbrella-answer revealed";
+    el.textContent = "Yes ☔";
+    wSpent = +(wSpent + amount).toFixed(2);
+    wCount++;
+    updateWeatherStats();
+    return;
+  }
+
+  if (payload.type === "weather_all") {
+    for (let i = 0; i < 5; i++) wUnlocked[i] = true;
+    buildWeather();
+    wSpent = +(wSpent + amount).toFixed(2);
+    wCount += 5;
+    updateWeatherStats();
+    return;
+  }
+
+  if (payload.type === "weather_day") {
+    wUnlocked[payload.dayIndex] = true;
+    buildWeather();
+    wSpent = +(wSpent + amount).toFixed(2);
+    wCount++;
+    updateWeatherStats();
+    return;
+  }
+
+  if (payload.type === "password") {
+    const el = document.getElementById("pw-display");
+    el.textContent = payload.password || pwCurrent;
+    el.className = "pw-display revealed";
+    pwSpent = +(pwSpent + amount).toFixed(2);
+    pwCount++;
+    document.getElementById("pw-spent").textContent = "$" + pwSpent.toFixed(2) + " spent";
+    document.getElementById("pw-count").textContent = pwCount + " reveal" + (pwCount !== 1 ? "s" : "");
+    return;
+  }
+
+  if (payload.type === "coin") {
+    document.getElementById("coin-result").style.filter = "none";
+    document.getElementById("coin-result").textContent = payload.result;
+    coinFlipped = false;
+    coinSpent = +(coinSpent + amount).toFixed(2);
+    coinCount++;
+    document.getElementById("coin-spent").textContent = "$" + coinSpent.toFixed(2) + " spent";
+    document.getElementById("coin-count").textContent = coinCount + " flip" + (coinCount !== 1 ? "s" : "") + " revealed";
+    return;
+  }
+
+  if (payload.type === "sort") {
+    const preview = document.getElementById("sort-preview");
+    preview.textContent = (payload.sorted || []).join("\n");
+    preview.className = "sort-preview";
+    sortSpent = +(sortSpent + amount).toFixed(2);
+    sortCount++;
+    document.getElementById("sort-spent").textContent = "$" + sortSpent.toFixed(2) + " spent";
+    document.getElementById("sort-count2").textContent = sortCount + " sort" + (sortCount !== 1 ? "s" : "");
+  }
+}
+
+let cDisp = "0", cPrev = null, cOp = null, cWait = false, cPaid = false, cSpent = 0, cCount = 0;
 function calcRender() {
-  const el = document.getElementById('calc-display');
+  const el = document.getElementById("calc-display");
   el.textContent = cDisp;
-  el.className = 'display-main' + (cPaid ? ' revealed' : '');
-  document.getElementById('calc-sub').textContent = cPrev !== null && cOp ? cPrev + ' ' + cOp : '';
-  document.getElementById('calc-spent').textContent = '$' + cSpent.toFixed(2) + ' spent';
-  document.getElementById('calc-count').textContent = cCount + ' calc' + (cCount !== 1 ? 's' : '');
+  el.className = "display-main" + (cPaid ? " revealed" : "");
+  document.getElementById("calc-sub").textContent = cPrev !== null && cOp ? cPrev + " " + cOp : "";
+  document.getElementById("calc-spent").textContent = "$" + cSpent.toFixed(2) + " spent";
+  document.getElementById("calc-count").textContent = cCount + " calc" + (cCount !== 1 ? "s" : "");
 }
 function calcDigit(d) {
   if (cPaid) { cDisp = String(d); cPaid = false; cWait = false; calcRender(); return; }
-  if (cWait) { cDisp = String(d); cWait = false; }
-  else cDisp = cDisp === '0' ? String(d) : cDisp + d;
+  if (cWait) { cDisp = String(d); cWait = false; } else cDisp = cDisp === "0" ? String(d) : cDisp + d;
   calcRender();
 }
 function calcDot() {
-  if (cWait) { cDisp = '0.'; cWait = false; calcRender(); return; }
-  if (!cDisp.includes('.')) cDisp += '.';
+  if (cWait) { cDisp = "0."; cWait = false; calcRender(); return; }
+  if (!cDisp.includes(".")) cDisp += ".";
   calcRender();
 }
-function calcClear() { cDisp = '0'; cPrev = null; cOp = null; cWait = false; cPaid = false; calcRender(); }
-function calcDo(a, b, o) { return ({ '+': a + b, '-': a - b, '×': a * b, '÷': a / b }[o] ?? b); }
+function calcClear() { cDisp = "0"; cPrev = null; cOp = null; cWait = false; cPaid = false; calcRender(); }
+function calcDo(a, b, o) { return ({ "+": a + b, "-": a - b, "×": a * b, "÷": a / b }[o] ?? b); }
 function calcOp(op) {
   const v = parseFloat(cDisp);
-  if (cPrev === null) { cPrev = v; }
+  if (cPrev === null) cPrev = v;
   else if (cOp) { const r = calcDo(cPrev, v, cOp); cPrev = r; cDisp = String(r); }
   cWait = true; cOp = op; calcRender();
 }
 function calcEquals() {
   if (!cOp || cPrev === null) return;
   const result = calcDo(cPrev, parseFloat(cDisp), cOp);
-  openModal(
-    `${cPrev} ${cOp} ${parseFloat(cDisp)} = <span class="hidden">████</span>`,
-    'Calculation result', 0.35,
-    () => { cDisp = String(result); cPrev = null; cOp = null; cWait = true; cPaid = true; cSpent = +(cSpent + 0.35).toFixed(2); cCount++; calcRender(); }
-  );
+  openModal(`${cPrev} ${cOp} ${parseFloat(cDisp)} = <span class="hidden">████</span>`, "Calculation result", DEFAULT_PRICE, {
+    type: "calc",
+    result,
+  });
 }
 
 let tSpent = 0, tCount = 0;
 function timePay(type) {
   const now = new Date();
-  let price, item, result;
-  if (type === 'time') { price = 0.55; item = 'Current time'; result = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
-  else if (type === 'seconds') { price = 0.80; item = 'Time with seconds'; result = now.toLocaleTimeString(); }
-  else { price = 0.40; item = "Today's date"; result = now.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); }
-  openModal(
-    `Your ${item.toLowerCase()} is ready.<br><span class="hidden" style="font-size:20px;">████████</span>`,
-    item, price,
-    () => {
-      document.getElementById('time-display').textContent = result;
-      document.getElementById('time-display').className = 'display-main revealed';
-      tSpent = +(tSpent + price).toFixed(2); tCount++;
-      document.getElementById('time-spent').textContent = '$' + tSpent.toFixed(2) + ' spent';
-      document.getElementById('time-count').textContent = tCount + ' reveal' + (tCount !== 1 ? 's' : '');
-    }
-  );
+  let item, result;
+  if (type === "time") { item = "Current time"; result = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
+  else if (type === "seconds") { item = "Time with seconds"; result = now.toLocaleTimeString(); }
+  else { item = "Today's date"; result = now.toLocaleDateString([], { weekday: "long", year: "numeric", month: "long", day: "numeric" }); }
+  openModal(`Your ${item.toLowerCase()} is ready.<br><span class="hidden" style="font-size:20px;">████████</span>`, item, DEFAULT_PRICE, {
+    type: "time",
+    result,
+  });
 }
 
 let wSpent = 0, wCount = 0;
-const DAYS = ['Today', 'Tomorrow', 'Wed', 'Thu', 'Fri'];
-const ICONS = ['⛅', '🌧️', '☀️', '🌩️', '🌤️'];
-const TEMPS = ['14°', '11°', '19°', '16°', '18°'];
+const DAYS = ["Today", "Tomorrow", "Wed", "Thu", "Fri"];
+const ICONS = ["⛅", "🌧️", "☀️", "🌩️", "🌤️"];
+const TEMPS = ["14°", "11°", "19°", "16°", "18°"];
 const wUnlocked = [false, false, false, false, false];
 function buildWeather() {
-  const c = document.getElementById('weather-days');
-  c.innerHTML = '';
+  const c = document.getElementById("weather-days");
+  c.innerHTML = "";
   DAYS.forEach((d, i) => {
     const locked = !wUnlocked[i];
-    c.innerHTML += `<div class="weather-day ${locked ? 'locked' : 'unlocked'}" style="cursor:${locked ? 'pointer' : 'default'}" onclick="${locked ? `weatherPay(${i})` : ''}">
+    c.innerHTML += `<div class="weather-day ${locked ? "locked" : "unlocked"}" style="cursor:${locked ? "pointer" : "default"}" onclick="${locked ? `weatherPay(${i})` : ""}">
       <span class="day-label">${d}</span>
-      <span class="day-icon">${locked ? '🌫️' : ICONS[i]}</span>
-      <span style="color:#fff;font-size:14px;">${locked ? '--°' : TEMPS[i]}</span>
-      ${locked ? `<button class="btn btn-muted" style="padding:6px 10px;height:auto;font-size:11px;" onclick="event.stopPropagation();weatherPay(${i})">$0.50</button>` : '<span style="font-size:11px;color:#a3e635;">✓</span>'}
+      <span class="day-icon">${locked ? "🌫️" : ICONS[i]}</span>
+      <span style="color:#fff;font-size:14px;">${locked ? "--°" : TEMPS[i]}</span>
+      ${locked ? `<button class="btn btn-muted" style="padding:6px 10px;height:auto;font-size:11px;" onclick="event.stopPropagation();weatherPay(${i})">$0.99</button>` : '<span style="font-size:11px;color:#a3e635;">✓</span>'}
     </div>`;
   });
 }
 function weatherPay(type) {
-  if (type === 'umbrella') {
-    openModal('Should you bring an umbrella today?<br><span class="hidden" style="font-size:18px;">Yes ☔</span>', 'Umbrella forecast', 0.49, () => {
-      const el = document.getElementById('umbrella-answer');
-      el.className = 'umbrella-answer revealed'; el.textContent = 'Yes ☔';
-      wSpent = +(wSpent + 0.49).toFixed(2); wCount++; updateWeatherStats();
+  if (type === "umbrella") {
+    openModal("Should you bring an umbrella today?<br><span class=\"hidden\" style=\"font-size:18px;\">Yes ☔</span>", "Umbrella forecast", DEFAULT_PRICE, {
+      type: "weather_umbrella",
     });
-  } else if (type === 'all') {
-    openModal('Unlock all 5 days of forecast', '5-day forecast', 2.50, () => {
-      for (let i = 0; i < 5; i++) wUnlocked[i] = true;
-      buildWeather(); wSpent = +(wSpent + 2.50).toFixed(2); wCount += 5; updateWeatherStats();
+  } else if (type === "all") {
+    openModal("Unlock all 5 days of forecast", "5-day forecast", DEFAULT_PRICE, {
+      type: "weather_all",
     });
   } else {
-    openModal(`Unlock ${DAYS[type]} forecast<br><span class="hidden">${ICONS[type]} ${TEMPS[type]}</span>`, `${DAYS[type]} forecast`, 0.50, () => {
-      wUnlocked[type] = true; buildWeather(); wSpent = +(wSpent + 0.50).toFixed(2); wCount++; updateWeatherStats();
+    openModal(`Unlock ${DAYS[type]} forecast<br><span class="hidden">${ICONS[type]} ${TEMPS[type]}</span>`, `${DAYS[type]} forecast`, DEFAULT_PRICE, {
+      type: "weather_day",
+      dayIndex: type,
     });
   }
 }
 function updateWeatherStats() {
-  document.getElementById('weather-spent').textContent = '$' + wSpent.toFixed(2) + ' spent';
-  document.getElementById('weather-count').textContent = wCount + ' unlock' + (wCount !== 1 ? 's' : '');
+  document.getElementById("weather-spent").textContent = "$" + wSpent.toFixed(2) + " spent";
+  document.getElementById("weather-count").textContent = wCount + " unlock" + (wCount !== 1 ? "s" : "");
 }
 
-let pwCurrent = '', pwSpent = 0, pwCount = 0;
-const CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+let pwCurrent = "", pwSpent = 0, pwCount = 0;
+const CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
 function pwGenerate() {
-  pwCurrent = Array.from({ length: 16 }, () => CHARS[Math.floor(Math.random() * CHARS.length)]).join('');
-  const el = document.getElementById('pw-display');
-  el.textContent = '••••••••••••••••';
-  el.className = 'pw-display blurred';
-  const bars = document.getElementById('pw-strength');
-  bars.innerHTML = '';
-  for (let i = 0; i < 5; i++) bars.innerHTML += '<div class="pw-bar on"></div>';
+  pwCurrent = Array.from({ length: 16 }, () => CHARS[Math.floor(Math.random() * CHARS.length)]).join("");
+  const el = document.getElementById("pw-display");
+  el.textContent = "••••••••••••••••";
+  el.className = "pw-display blurred";
+  const bars = document.getElementById("pw-strength");
+  bars.innerHTML = "";
+  for (let i = 0; i < 5; i++) bars.innerHTML += "<div class=\"pw-bar on\"></div>";
 }
 function pwPay() {
   if (!pwCurrent) pwGenerate();
-  openModal('Your secure password is ready.<br><span class="hidden" style="font-family:monospace;">████████████████</span>', 'Password reveal', 0.50, () => {
-    const el = document.getElementById('pw-display');
-    el.textContent = pwCurrent; el.className = 'pw-display revealed';
-    pwSpent = +(pwSpent + 0.50).toFixed(2); pwCount++;
-    document.getElementById('pw-spent').textContent = '$' + pwSpent.toFixed(2) + ' spent';
-    document.getElementById('pw-count').textContent = pwCount + ' reveal' + (pwCount !== 1 ? 's' : '');
+  openModal("Your secure password is ready.<br><span class=\"hidden\" style=\"font-family:monospace;\">████████████████</span>", "Password reveal", DEFAULT_PRICE, {
+    type: "password",
+    password: pwCurrent,
   });
 }
 
 let coinResult = null, coinFlipped = false, coinSpent = 0, coinCount = 0;
 function coinFlip() {
-  coinResult = Math.random() < 0.5 ? 'Heads' : 'Tails';
+  coinResult = Math.random() < 0.5 ? "Heads" : "Tails";
   coinFlipped = true;
-  const coin = document.getElementById('coin');
-  coin.classList.add('flipping');
-  document.getElementById('coin-result').style.filter = 'blur(6px)';
-  document.getElementById('coin-result').textContent = '?';
-  setTimeout(() => { coin.classList.remove('flipping'); coin.textContent = '🪙'; }, 700);
+  const coin = document.getElementById("coin");
+  coin.classList.add("flipping");
+  document.getElementById("coin-result").style.filter = "blur(6px)";
+  document.getElementById("coin-result").textContent = "?";
+  setTimeout(() => { coin.classList.remove("flipping"); coin.textContent = "🪙"; }, 700);
 }
 function coinPay() {
   if (!coinFlipped) { coinFlip(); setTimeout(() => coinPay(), 800); return; }
-  openModal('Your coin flip result is ready.<br><span class="hidden" style="font-size:24px;font-weight:800;">████████</span>', 'Flip result', 0.10, () => {
-    document.getElementById('coin-result').style.filter = 'none';
-    document.getElementById('coin-result').textContent = coinResult;
-    coinFlipped = false; coinSpent = +(coinSpent + 0.10).toFixed(2); coinCount++;
-    document.getElementById('coin-spent').textContent = '$' + coinSpent.toFixed(2) + ' spent';
-    document.getElementById('coin-count').textContent = coinCount + ' flip' + (coinCount !== 1 ? 's' : '') + ' revealed';
+  openModal("Your coin flip result is ready.<br><span class=\"hidden\" style=\"font-size:24px;font-weight:800;\">████████</span>", "Flip result", DEFAULT_PRICE, {
+    type: "coin",
+    result: coinResult,
   });
 }
 
 let sortSpent = 0, sortCount = 0, sortedList = [];
 function sortPreview() {
-  const lines = document.getElementById('sort-input').value.split('\n').map((l) => l.trim()).filter((l) => l);
-  const n = Math.max(lines.length, 10);
-  const price = (n * 0.05).toFixed(2);
-  document.getElementById('sort-count').textContent = `${lines.length} item${lines.length !== 1 ? 's' : ''} · $${price} (min $0.50)`;
-  document.getElementById('sort-price').textContent = '$' + price;
+  const lines = document.getElementById("sort-input").value.split("\n").map((l) => l.trim()).filter((l) => l);
+  document.getElementById("sort-count").textContent = `${lines.length} item${lines.length !== 1 ? "s" : ""} · Flat $0.99`;
+  document.getElementById("sort-price").textContent = "$0.99";
   sortedList = [...lines].sort((a, b) => a.localeCompare(b));
-  const preview = document.getElementById('sort-preview');
-  preview.textContent = sortedList.length ? sortedList.join('\n') : 'Your sorted list will appear here.';
-  preview.className = 'sort-preview blurred';
+  const preview = document.getElementById("sort-preview");
+  preview.textContent = sortedList.length ? sortedList.join("\n") : "Your sorted list will appear here.";
+  preview.className = "sort-preview blurred";
 }
 function sortPay() {
-  const lines = document.getElementById('sort-input').value.split('\n').map((l) => l.trim()).filter((l) => l);
+  const lines = document.getElementById("sort-input").value.split("\n").map((l) => l.trim()).filter((l) => l);
   if (lines.length === 0) return;
-  const n = Math.max(lines.length, 10);
-  const price = +(n * 0.05).toFixed(2);
   sortedList = [...lines].sort((a, b) => a.localeCompare(b));
-  openModal(`Sort ${lines.length} item${lines.length !== 1 ? 's' : ''} alphabetically<br><span class="hidden">${sortedList.slice(0, 3).join(', ')}...</span>`, `Sort ${lines.length} items`, price, () => {
-    const preview = document.getElementById('sort-preview');
-    preview.textContent = sortedList.join('\n');
-    preview.className = 'sort-preview';
-    sortSpent = +(sortSpent + price).toFixed(2); sortCount++;
-    document.getElementById('sort-spent').textContent = '$' + sortSpent.toFixed(2) + ' spent';
-    document.getElementById('sort-count2').textContent = sortCount + ' sort' + (sortCount !== 1 ? 's' : '');
+  openModal(`Sort ${lines.length} item${lines.length !== 1 ? "s" : ""} alphabetically<br><span class="hidden">${sortedList.slice(0, 3).join(", ")}...</span>`, `Sort ${lines.length} items`, DEFAULT_PRICE, {
+    type: "sort",
+    sorted: sortedList,
   });
 }
 
@@ -463,6 +605,7 @@ pwGenerate();
 buildWeather();
 calcRender();
 sortPreview();
+applyPaidPurchaseFromReturn();
 </script>
 </body>
 </html>

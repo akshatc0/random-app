@@ -5,7 +5,7 @@ const { URL } = require("url");
 
 const PORT = process.env.PORT || 3000;
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || "";
-const PRICE_CENTS = 85;
+const PRICE_CENTS = 99;
 const CURRENCY = "usd";
 
 function sendJson(res, statusCode, data) {
@@ -36,14 +36,14 @@ function readBody(req) {
   });
 }
 
-async function createCheckoutSession(origin) {
+async function createCheckoutSession(origin, itemName, amountCents) {
   const body = new URLSearchParams();
   body.set("mode", "payment");
   body.set("success_url", `${origin}/?paid=1&session_id={CHECKOUT_SESSION_ID}`);
   body.set("cancel_url", `${origin}/?canceled=1`);
   body.set("line_items[0][price_data][currency]", CURRENCY);
-  body.set("line_items[0][price_data][product_data][name]", "Calculation result");
-  body.set("line_items[0][price_data][unit_amount]", String(PRICE_CENTS));
+  body.set("line_items[0][price_data][product_data][name]", itemName);
+  body.set("line_items[0][price_data][unit_amount]", String(amountCents));
   body.set("line_items[0][quantity]", "1");
 
   const response = await fetch("https://api.stripe.com/v1/checkout/sessions", {
@@ -102,9 +102,15 @@ const server = http.createServer(async (req, res) => {
         return;
       }
 
-      await readBody(req);
+      const rawBody = await readBody(req);
+      const parsedBody = rawBody ? JSON.parse(rawBody) : {};
+      const requestedCents = Number.isInteger(parsedBody.amount_cents) ? parsedBody.amount_cents : PRICE_CENTS;
+      const amountCents = Math.min(9999, Math.max(99, requestedCents));
+      const itemName = typeof parsedBody.item_name === "string" && parsedBody.item_name.trim()
+        ? parsedBody.item_name.trim().slice(0, 120)
+        : "Information reveal";
       const origin = `http://${req.headers.host}`;
-      const session = await createCheckoutSession(origin);
+      const session = await createCheckoutSession(origin, itemName, amountCents);
       sendJson(res, 200, { url: session.url, id: session.id });
       return;
     }
