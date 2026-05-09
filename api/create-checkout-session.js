@@ -1,4 +1,4 @@
-const PRICE_CENTS = 35;
+const PRICE_CENTS = 85;
 const CURRENCY = "usd";
 
 module.exports = async function handler(req, res) {
