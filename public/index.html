@@ -16,9 +16,7 @@
 
   #home{align-items:center;justify-content:center;}
   .home-inner{width:100%;max-width:420px;padding:40px 24px;}
-  .home-logo{display:flex;justify-content:center;margin-bottom:20px;}
-  .home-logo img{width:min(320px,80vw);height:auto;display:block;}
-  .home-tag{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:34px;text-align:center;}
+  .home-tag{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;text-align:center;}
   .nav-list{list-style:none;width:100%;}
   .nav-list li{border-top:1px solid var(--border);cursor:pointer;}
   .nav-list li:last-child{border-bottom:1px solid var(--border);}
@@ -28,7 +26,7 @@
   .nav-item-name .btm{position:absolute;top:0;left:0;transform:translateY(100%);}
   .nav-list li:hover .nav-item-name .top{transform:translateY(-100%);}
   .nav-list li:hover .nav-item-name .btm{transform:translateY(0);}
-  .nav-item-idx{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;}
+  .nav-item-idx{display:none;}
 
   .product-page{align-items:center;justify-content:center;flex:1;}
   .product-wrap{width:100%;max-width:360px;padding:24px;}
@@ -109,15 +107,14 @@
 <div id="home" class="page active">
   <div class="product-page">
     <div class="home-inner">
-      <div class="home-logo"><img src="/logo.png" alt="expensive solutions logo" /></div>
       <div class="home-tag">The internet's finest paid answers</div>
       <ul class="nav-list">
-        <li onclick="showPage('calcpay')"><a><span class="nav-item-name"><span class="top">CalcPay</span><span class="btm">CalcPay</span></span><span class="nav-item-idx">[0]</span></a></li>
-        <li onclick="showPage('timepay')"><a><span class="nav-item-name"><span class="top">TimePay</span><span class="btm">TimePay</span></span><span class="nav-item-idx">[1]</span></a></li>
-        <li onclick="showPage('weatherpay')"><a><span class="nav-item-name"><span class="top">WeatherPay</span><span class="btm">WeatherPay</span></span><span class="nav-item-idx">[2]</span></a></li>
-        <li onclick="showPage('passwordpay')"><a><span class="nav-item-name"><span class="top">PasswordPay</span><span class="btm">PasswordPay</span></span><span class="nav-item-idx">[3]</span></a></li>
-        <li onclick="showPage('coinflip')"><a><span class="nav-item-name"><span class="top">CoinFlip Pro</span><span class="btm">CoinFlip Pro</span></span><span class="nav-item-idx">[4]</span></a></li>
-        <li onclick="showPage('sortpay')"><a><span class="nav-item-name"><span class="top">SortPay</span><span class="btm">SortPay</span></span><span class="nav-item-idx">[5]</span></a></li>
+        <li onclick="showPage('calcpay')"><a><span class="nav-item-name"><span class="top">CalcPay</span><span class="btm">CalcPay</span></span></a></li>
+        <li onclick="showPage('timepay')"><a><span class="nav-item-name"><span class="top">TimePay</span><span class="btm">TimePay</span></span></a></li>
+        <li onclick="showPage('weatherpay')"><a><span class="nav-item-name"><span class="top">WeatherPay</span><span class="btm">WeatherPay</span></span></a></li>
+        <li onclick="showPage('passwordpay')"><a><span class="nav-item-name"><span class="top">PasswordPay</span><span class="btm">PasswordPay</span></span></a></li>
+        <li onclick="showPage('coinflip')"><a><span class="nav-item-name"><span class="top">CoinFlip Pro</span><span class="btm">CoinFlip Pro</span></span></a></li>
+        <li onclick="showPage('sortpay')"><a><span class="nav-item-name"><span class="top">SortPay</span><span class="btm">SortPay</span></span></a></li>
       </ul>
     </div>
   </div>
