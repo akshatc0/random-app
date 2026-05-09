@@ -30,6 +30,7 @@ module.exports = async function handler(req, res) {
     body.set("line_items[0][price_data][product_data][name]", itemName);
     body.set("line_items[0][price_data][unit_amount]", String(safeAmountCents));
     body.set("line_items[0][quantity]", "1");
+    body.set("allow_promotion_codes", "true");
 
     const response = await fetch("https://api.stripe.com/v1/checkout/sessions", {
       method: "POST",
