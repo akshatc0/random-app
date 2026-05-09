@@ -1,49 +1,471 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CalcPay</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-zinc-950">
-    <div
-      class="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-6"
-      style="font-family: ui-sans-serif, system-ui, -apple-system, sans-serif"
-    >
-      <div class="w-full max-w-xs">
-        <div class="mb-4 px-2">
-          <div id="expression" class="text-zinc-600 text-sm h-5 tabular-nums text-right"></div>
-          <div id="display" class="text-right text-5xl font-light tabular-nums truncate mt-1 transition-colors text-white">0</div>
-        </div>
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>expensive.solutions</title>
+<link rel="icon" type="image/png" href="/logo.png" />
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{--bg:#0a0a0a;--fg:#ffffff;--muted:#555;--border:#1f1f1f;--accent:#ffffff;}
+  body{background:var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;min-height:100vh;overflow-x:hidden;}
 
-        <div class="grid grid-cols-4 gap-2" id="buttons"></div>
+  nav{display:none;}
+  .page{display:none;min-height:100vh;padding-top:0;}
+  .page.active{display:flex;flex-direction:column;}
 
-        <div class="mt-4 flex justify-between text-[11px] text-zinc-600 px-1">
-          <span id="spent">$0.00 spent</span>
-          <span id="count">0 calcs</span>
+  #home{align-items:center;justify-content:center;}
+  .home-inner{width:100%;max-width:420px;padding:40px 24px;}
+  .home-logo{display:flex;justify-content:center;margin-bottom:20px;}
+  .home-logo img{width:min(320px,80vw);height:auto;display:block;}
+  .home-tag{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:34px;text-align:center;}
+  .nav-list{list-style:none;width:100%;}
+  .nav-list li{border-top:1px solid var(--border);cursor:pointer;}
+  .nav-list li:last-child{border-bottom:1px solid var(--border);}
+  .nav-list li a{display:flex;align-items:baseline;justify-content:space-between;padding:18px 0;text-decoration:none;color:var(--fg);}
+  .nav-item-name{font-size:clamp(28px,7vw,42px);font-weight:800;text-transform:uppercase;letter-spacing:-0.03em;line-height:1;overflow:hidden;position:relative;}
+  .nav-item-name .top, .nav-item-name .btm{display:block;transition:transform .35s cubic-bezier(.4,0,.2,1);}
+  .nav-item-name .btm{position:absolute;top:0;left:0;transform:translateY(100%);}
+  .nav-list li:hover .nav-item-name .top{transform:translateY(-100%);}
+  .nav-list li:hover .nav-item-name .btm{transform:translateY(0);}
+  .nav-item-idx{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;}
+
+  .product-page{align-items:center;justify-content:center;flex:1;}
+  .product-wrap{width:100%;max-width:360px;padding:24px;}
+  .product-label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:32px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;}
+  .product-label:hover{color:var(--fg);}
+  .product-title{font-size:22px;font-weight:700;margin-bottom:6px;}
+  .product-sub{font-size:13px;color:var(--muted);margin-bottom:36px;line-height:1.5;}
+
+  .card{background:#111;border:1px solid var(--border);border-radius:16px;padding:24px;}
+  .display{background:#000;border-radius:10px;padding:20px;margin-bottom:20px;min-height:80px;display:flex;flex-direction:column;justify-content:flex-end;}
+  .display-sub{font-size:11px;color:var(--muted);margin-bottom:4px;min-height:16px;}
+  .display-main{font-size:40px;font-weight:300;color:#fff;text-align:right;font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .display-main.revealed{color:#a3e635;}
+  .btn-grid{display:grid;gap:8px;}
+  .btn{border:none;border-radius:12px;height:52px;font-size:16px;font-weight:500;cursor:pointer;transition:all .15s;}
+  .btn:active{transform:scale(.96);}
+  .btn-default{background:#1c1c1c;color:#fff;}
+  .btn-default:hover{background:#2a2a2a;}
+  .btn-action{background:#fff;color:#000;}
+  .btn-action:hover{background:#e5e5e5;}
+  .btn-muted{background:#161616;color:#888;}
+  .btn-muted:hover{background:#222;color:#fff;}
+  .footer-stat{margin-top:14px;display:flex;justify-content:space-between;font-size:11px;color:#444;padding:0 2px;}
+
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px;}
+  .modal-backdrop.open{display:flex;}
+  .modal{background:#111;border:1px solid #222;border-radius:20px;padding:28px;max-width:340px;width:100%;}
+  .modal-label{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#555;margin-bottom:20px;}
+  .modal-preview{background:#000;border-radius:10px;padding:14px 16px;font-family:monospace;font-size:14px;color:#666;margin-bottom:20px;}
+  .modal-preview span.hidden{filter:blur(5px);color:#fff;user-select:none;}
+  .modal-row{display:flex;justify-content:space-between;font-size:13px;color:#666;margin-bottom:8px;}
+  .modal-row.total{color:#fff;font-weight:600;border-top:1px solid #222;padding-top:12px;margin-top:4px;}
+  .modal-pay{width:100%;background:#fff;color:#000;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;margin-top:20px;transition:background .2s;}
+  .modal-pay:hover{background:#ddd;}
+  .modal-pay:disabled{opacity:.5;cursor:default;}
+  .modal-cancel{width:100%;background:none;border:none;color:#555;font-size:12px;padding:10px;cursor:pointer;margin-top:4px;transition:color .2s;}
+  .modal-cancel:hover{color:#fff;}
+  .modal-fine{font-size:10px;color:#333;text-align:center;margin-top:16px;padding-top:14px;border-top:1px solid #1a1a1a;}
+
+  .calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+  .calc-grid .btn{height:52px;font-size:17px;}
+  .span2{grid-column:span 2;}
+
+  .coin{width:100px;height:100px;margin:0 auto 24px;border-radius:50%;background:#1c1c1c;border:1px solid #333;display:flex;align-items:center;justify-content:center;font-size:36px;transition:transform .6s;}
+  .coin.flipping{animation:flip .6s ease-in-out infinite;}
+  @keyframes flip{0%{transform:rotateY(0)}50%{transform:rotateY(90deg)}100%{transform:rotateY(180deg)}}
+  .coin-result-blur{filter:blur(6px);font-size:32px;font-weight:800;text-align:center;margin-bottom:8px;color:#fff;user-select:none;}
+
+  textarea{width:100%;background:#000;border:1px solid #222;border-radius:10px;color:#fff;font-size:13px;padding:14px;resize:vertical;min-height:120px;font-family:monospace;outline:none;}
+  textarea:focus{border-color:#333;}
+  .sort-preview{background:#000;border-radius:10px;padding:14px;font-size:13px;font-family:monospace;color:#555;min-height:80px;margin-bottom:12px;position:relative;overflow:hidden;white-space:pre-wrap;}
+  .sort-preview.blurred{filter:blur(5px);user-select:none;}
+  .sort-count{font-size:12px;color:#555;margin-bottom:12px;}
+
+  .pw-display{background:#000;border-radius:10px;padding:18px;font-family:monospace;font-size:18px;text-align:center;letter-spacing:0.08em;color:#fff;margin-bottom:12px;min-height:58px;display:flex;align-items:center;justify-content:center;}
+  .pw-display.blurred{filter:blur(6px);user-select:none;}
+  .pw-strength{display:flex;gap:4px;margin-bottom:16px;}
+  .pw-bar{height:3px;flex:1;border-radius:2px;background:#1c1c1c;}
+  .pw-bar.on{background:#a3e635;}
+
+  .weather-days{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+  .weather-day{background:#000;border-radius:10px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;font-size:14px;}
+  .weather-day .day-label{color:#888;}
+  .weather-day .day-icon{font-size:20px;}
+  .weather-day.locked .day-icon{filter:blur(4px);}
+  .weather-day.unlocked .day-icon{filter:none;}
+  .umbrella-card{background:#000;border-radius:10px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .umbrella-answer{filter:blur(5px);font-size:18px;user-select:none;}
+  .umbrella-answer.revealed{filter:none;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">expensive<span>.solutions</span></div>
+</nav>
+
+<div id="home" class="page active">
+  <div class="product-page">
+    <div class="home-inner">
+      <div class="home-logo"><img src="/logo.png" alt="expensive solutions logo" /></div>
+      <div class="home-tag">The internet's finest paid answers</div>
+      <ul class="nav-list">
+        <li onclick="showPage('calcpay')"><a><span class="nav-item-name"><span class="top">CalcPay</span><span class="btm">CalcPay</span></span><span class="nav-item-idx">[0]</span></a></li>
+        <li onclick="showPage('timepay')"><a><span class="nav-item-name"><span class="top">TimePay</span><span class="btm">TimePay</span></span><span class="nav-item-idx">[1]</span></a></li>
+        <li onclick="showPage('weatherpay')"><a><span class="nav-item-name"><span class="top">WeatherPay</span><span class="btm">WeatherPay</span></span><span class="nav-item-idx">[2]</span></a></li>
+        <li onclick="showPage('passwordpay')"><a><span class="nav-item-name"><span class="top">PasswordPay</span><span class="btm">PasswordPay</span></span><span class="nav-item-idx">[3]</span></a></li>
+        <li onclick="showPage('coinflip')"><a><span class="nav-item-name"><span class="top">CoinFlip Pro</span><span class="btm">CoinFlip Pro</span></span><span class="nav-item-idx">[4]</span></a></li>
+        <li onclick="showPage('sortpay')"><a><span class="nav-item-name"><span class="top">SortPay</span><span class="btm">SortPay</span></span><span class="nav-item-idx">[5]</span></a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div id="calcpay" class="page">
+  <div class="product-page">
+    <div class="product-wrap">
+      <div class="product-label" onclick="showPage('home')">← expensive.solutions</div>
+      <div class="product-title">CalcPay</div>
+      <div class="product-sub">Pay $0.35 per calculation result. Math is a service.</div>
+      <div class="card">
+        <div class="display">
+          <div class="display-sub" id="calc-sub"></div>
+          <div class="display-main" id="calc-display">0</div>
         </div>
+        <div class="calc-grid">
+          <button class="btn btn-muted" onclick="calcClear()">AC</button>
+          <button class="btn btn-muted" onclick="">±</button>
+          <button class="btn btn-muted" onclick="">%</button>
+          <button class="btn btn-default" onclick="calcOp('÷')">÷</button>
+          <button class="btn btn-default" onclick="calcDigit(7)">7</button>
+          <button class="btn btn-default" onclick="calcDigit(8)">8</button>
+          <button class="btn btn-default" onclick="calcDigit(9)">9</button>
+          <button class="btn btn-default" onclick="calcOp('×')">×</button>
+          <button class="btn btn-default" onclick="calcDigit(4)">4</button>
+          <button class="btn btn-default" onclick="calcDigit(5)">5</button>
+          <button class="btn btn-default" onclick="calcDigit(6)">6</button>
+          <button class="btn btn-default" onclick="calcOp('-')">−</button>
+          <button class="btn btn-default" onclick="calcDigit(1)">1</button>
+          <button class="btn btn-default" onclick="calcDigit(2)">2</button>
+          <button class="btn btn-default" onclick="calcDigit(3)">3</button>
+          <button class="btn btn-default" onclick="calcOp('+')">+</button>
+          <button class="btn btn-default span2" onclick="calcDigit(0)">0</button>
+          <button class="btn btn-default" onclick="calcDot()">.</button>
+          <button class="btn btn-action" onclick="calcEquals()">=</button>
+        </div>
+        <div class="footer-stat"><span id="calc-spent">$0.00 spent</span><span id="calc-count">0 calcs</span></div>
       </div>
     </div>
+  </div>
+</div>
 
-    <div id="paywall" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div class="bg-zinc-900 border border-zinc-800 rounded-2xl max-w-sm w-full p-7 shadow-2xl">
-        <div class="text-xs text-zinc-500 uppercase tracking-widest mb-5">CalcPay Checkout</div>
-
-        <div id="paywall-expression" class="bg-zinc-950 rounded-xl px-4 py-3 mb-6 font-mono text-sm text-zinc-400"></div>
-
-        <div class="space-y-2 text-sm mb-6">
-          <div class="flex justify-between text-zinc-400"><span>Calculation result</span><span>$0.85</span></div>
-          <div class="flex justify-between text-zinc-600 text-xs"><span>Mathematical processing</span><span>$0.00</span></div>
-          <div class="flex justify-between font-medium text-white pt-2 border-t border-zinc-800"><span>Total</span><span>$0.85</span></div>
+<div id="timepay" class="page">
+  <div class="product-page">
+    <div class="product-wrap">
+      <div class="product-label" onclick="showPage('home')">← expensive.solutions</div>
+      <div class="product-title">TimePay</div>
+      <div class="product-sub">The clock is free. Knowing what time it is costs $0.55. Seconds cost extra.</div>
+      <div class="card">
+        <div class="display">
+          <div class="display-sub">current time</div>
+          <div class="display-main" id="time-display" style="font-size:32px">--:-- --</div>
         </div>
-
-        <button id="pay-btn" class="w-full bg-white text-zinc-900 py-2.5 rounded-xl font-medium text-sm hover:bg-zinc-100 disabled:opacity-50 transition-all mb-2">Pay $0.85</button>
-        <button id="cancel-btn" class="w-full text-zinc-600 hover:text-zinc-300 text-xs py-2 transition-colors">Remain ignorant (free)</button>
-        <p id="pay-error" class="text-red-400 text-xs mt-2 hidden"></p>
+        <button class="btn btn-action" style="width:100%;margin-bottom:8px;" onclick="timePay('time')">Reveal time — $0.55</button>
+        <button class="btn btn-muted" style="width:100%;margin-bottom:8px;" onclick="timePay('seconds')">+ Include seconds — $0.25 extra</button>
+        <button class="btn btn-muted" style="width:100%;" onclick="timePay('date')">Reveal today's date — $0.40</button>
+        <div class="footer-stat"><span id="time-spent">$0.00 spent</span><span id="time-count">0 reveals</span></div>
       </div>
     </div>
+  </div>
+</div>
 
-    <script src="/app.js"></script>
-  </body>
+<div id="weatherpay" class="page">
+  <div class="product-page">
+    <div class="product-wrap">
+      <div class="product-label" onclick="showPage('home')">← expensive.solutions</div>
+      <div class="product-title">WeatherPay</div>
+      <div class="product-sub">Each day of forecast costs $0.50. Knowing whether to bring an umbrella: $0.49.</div>
+      <div class="card">
+        <div class="umbrella-card">
+          <div style="font-size:13px;color:#888;">Bring an umbrella?</div>
+          <div class="umbrella-answer" id="umbrella-answer">Yes ☔</div>
+          <button class="btn btn-action" style="padding:8px 14px;height:auto;font-size:12px;" onclick="weatherPay('umbrella')">$0.49</button>
+        </div>
+        <div class="weather-days" id="weather-days"></div>
+        <button class="btn btn-action" style="width:100%;" onclick="weatherPay('all')">Unlock all 5 days — $2.50</button>
+        <div class="footer-stat"><span id="weather-spent">$0.00 spent</span><span id="weather-count">0 unlocks</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="passwordpay" class="page">
+  <div class="product-page">
+    <div class="product-wrap">
+      <div class="product-label" onclick="showPage('home')">← expensive.solutions</div>
+      <div class="product-title">PasswordPay</div>
+      <div class="product-sub">We generate a secure password. Revealing it costs $0.50. Free tier: ••••••••</div>
+      <div class="card">
+        <div class="pw-display blurred" id="pw-display">••••••••••••</div>
+        <div class="pw-strength" id="pw-strength"></div>
+        <button class="btn btn-muted" style="width:100%;margin-bottom:8px;" onclick="pwGenerate()">Generate new password (free)</button>
+        <button class="btn btn-action" style="width:100%;" onclick="pwPay()">Reveal password — $0.50</button>
+        <div class="footer-stat"><span id="pw-spent">$0.00 spent</span><span id="pw-count">0 reveals</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="coinflip" class="page">
+  <div class="product-page">
+    <div class="product-wrap">
+      <div class="product-label" onclick="showPage('home')">← expensive.solutions</div>
+      <div class="product-title">CoinFlip Pro</div>
+      <div class="product-sub">The flip is free. The result costs $0.10. Heads or tails has real value.</div>
+      <div class="card">
+        <div class="coin" id="coin">🪙</div>
+        <div class="coin-result-blur" id="coin-result" style="filter:blur(6px)">?</div>
+        <div style="font-size:11px;color:#444;text-align:center;margin-bottom:20px;">result hidden until payment</div>
+        <button class="btn btn-muted" style="width:100%;margin-bottom:8px;" onclick="coinFlip()">Flip coin (free)</button>
+        <button class="btn btn-action" style="width:100%;" onclick="coinPay()">Reveal result — $0.10</button>
+        <div class="footer-stat"><span id="coin-spent">$0.00 spent</span><span id="coin-count">0 flips revealed</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="sortpay" class="page">
+  <div class="product-page">
+    <div class="product-wrap">
+      <div class="product-label" onclick="showPage('home')">← expensive.solutions</div>
+      <div class="product-title">SortPay</div>
+      <div class="product-sub">$0.05 per item sorted. Minimum 10 items ($0.50). Results blurred until payment.</div>
+      <div class="card">
+        <textarea id="sort-input" placeholder="Paste your list here, one item per line..." oninput="sortPreview()"></textarea>
+        <div class="sort-count" id="sort-count" style="margin-top:8px;">0 items · $0.50 (min $0.50)</div>
+        <div class="sort-preview blurred" id="sort-preview">Your sorted list will appear here.</div>
+        <button class="btn btn-action" style="width:100%;" onclick="sortPay()">Sort & reveal — <span id="sort-price">$0.50</span></button>
+        <div class="footer-stat"><span id="sort-spent">$0.00 spent</span><span id="sort-count2">0 sorts</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <div class="modal-label">expensive.solutions — checkout</div>
+    <div class="modal-preview" id="modal-preview"></div>
+    <div class="modal-row"><span id="modal-item">Item</span><span id="modal-price">$0.00</span></div>
+    <div class="modal-row" style="font-size:11px;"><span>Processing fee</span><span>$0.00</span></div>
+    <div class="modal-row total"><span>Total</span><span id="modal-total">$0.00</span></div>
+    <button class="modal-pay" id="modal-pay-btn" onclick="modalPay()">Pay now</button>
+    <button class="modal-cancel" onclick="modalClose()">Remain ignorant (free)</button>
+    <div class="modal-fine">By proceeding, you acknowledge that this information has value.</div>
+  </div>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach((p) => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+let modalCallback = null;
+function openModal(preview, item, price, cb) {
+  document.getElementById('modal-preview').innerHTML = preview;
+  document.getElementById('modal-item').textContent = item;
+  document.getElementById('modal-price').textContent = '$' + price.toFixed(2);
+  document.getElementById('modal-total').textContent = '$' + price.toFixed(2);
+  document.getElementById('modal-pay-btn').textContent = 'Pay $' + price.toFixed(2);
+  document.getElementById('modal-pay-btn').disabled = false;
+  modalCallback = cb;
+  document.getElementById('modal').classList.add('open');
+}
+function modalClose() { document.getElementById('modal').classList.remove('open'); }
+function modalPay() {
+  const btn = document.getElementById('modal-pay-btn');
+  btn.disabled = true;
+  btn.textContent = 'Processing...';
+  setTimeout(() => { modalClose(); if (modalCallback) modalCallback(); }, 1400);
+}
+
+let cDisp = '0', cPrev = null, cOp = null, cWait = false, cPaid = false, cSpent = 0, cCount = 0;
+function calcRender() {
+  const el = document.getElementById('calc-display');
+  el.textContent = cDisp;
+  el.className = 'display-main' + (cPaid ? ' revealed' : '');
+  document.getElementById('calc-sub').textContent = cPrev !== null && cOp ? cPrev + ' ' + cOp : '';
+  document.getElementById('calc-spent').textContent = '$' + cSpent.toFixed(2) + ' spent';
+  document.getElementById('calc-count').textContent = cCount + ' calc' + (cCount !== 1 ? 's' : '');
+}
+function calcDigit(d) {
+  if (cPaid) { cDisp = String(d); cPaid = false; cWait = false; calcRender(); return; }
+  if (cWait) { cDisp = String(d); cWait = false; }
+  else cDisp = cDisp === '0' ? String(d) : cDisp + d;
+  calcRender();
+}
+function calcDot() {
+  if (cWait) { cDisp = '0.'; cWait = false; calcRender(); return; }
+  if (!cDisp.includes('.')) cDisp += '.';
+  calcRender();
+}
+function calcClear() { cDisp = '0'; cPrev = null; cOp = null; cWait = false; cPaid = false; calcRender(); }
+function calcDo(a, b, o) { return ({ '+': a + b, '-': a - b, '×': a * b, '÷': a / b }[o] ?? b); }
+function calcOp(op) {
+  const v = parseFloat(cDisp);
+  if (cPrev === null) { cPrev = v; }
+  else if (cOp) { const r = calcDo(cPrev, v, cOp); cPrev = r; cDisp = String(r); }
+  cWait = true; cOp = op; calcRender();
+}
+function calcEquals() {
+  if (!cOp || cPrev === null) return;
+  const result = calcDo(cPrev, parseFloat(cDisp), cOp);
+  openModal(
+    `${cPrev} ${cOp} ${parseFloat(cDisp)} = <span class="hidden">████</span>`,
+    'Calculation result', 0.35,
+    () => { cDisp = String(result); cPrev = null; cOp = null; cWait = true; cPaid = true; cSpent = +(cSpent + 0.35).toFixed(2); cCount++; calcRender(); }
+  );
+}
+
+let tSpent = 0, tCount = 0;
+function timePay(type) {
+  const now = new Date();
+  let price, item, result;
+  if (type === 'time') { price = 0.55; item = 'Current time'; result = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
+  else if (type === 'seconds') { price = 0.80; item = 'Time with seconds'; result = now.toLocaleTimeString(); }
+  else { price = 0.40; item = "Today's date"; result = now.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); }
+  openModal(
+    `Your ${item.toLowerCase()} is ready.<br><span class="hidden" style="font-size:20px;">████████</span>`,
+    item, price,
+    () => {
+      document.getElementById('time-display').textContent = result;
+      document.getElementById('time-display').className = 'display-main revealed';
+      tSpent = +(tSpent + price).toFixed(2); tCount++;
+      document.getElementById('time-spent').textContent = '$' + tSpent.toFixed(2) + ' spent';
+      document.getElementById('time-count').textContent = tCount + ' reveal' + (tCount !== 1 ? 's' : '');
+    }
+  );
+}
+
+let wSpent = 0, wCount = 0;
+const DAYS = ['Today', 'Tomorrow', 'Wed', 'Thu', 'Fri'];
+const ICONS = ['⛅', '🌧️', '☀️', '🌩️', '🌤️'];
+const TEMPS = ['14°', '11°', '19°', '16°', '18°'];
+const wUnlocked = [false, false, false, false, false];
+function buildWeather() {
+  const c = document.getElementById('weather-days');
+  c.innerHTML = '';
+  DAYS.forEach((d, i) => {
+    const locked = !wUnlocked[i];
+    c.innerHTML += `<div class="weather-day ${locked ? 'locked' : 'unlocked'}" style="cursor:${locked ? 'pointer' : 'default'}" onclick="${locked ? `weatherPay(${i})` : ''}">
+      <span class="day-label">${d}</span>
+      <span class="day-icon">${locked ? '🌫️' : ICONS[i]}</span>
+      <span style="color:#fff;font-size:14px;">${locked ? '--°' : TEMPS[i]}</span>
+      ${locked ? `<button class="btn btn-muted" style="padding:6px 10px;height:auto;font-size:11px;" onclick="event.stopPropagation();weatherPay(${i})">$0.50</button>` : '<span style="font-size:11px;color:#a3e635;">✓</span>'}
+    </div>`;
+  });
+}
+function weatherPay(type) {
+  if (type === 'umbrella') {
+    openModal('Should you bring an umbrella today?<br><span class="hidden" style="font-size:18px;">Yes ☔</span>', 'Umbrella forecast', 0.49, () => {
+      const el = document.getElementById('umbrella-answer');
+      el.className = 'umbrella-answer revealed'; el.textContent = 'Yes ☔';
+      wSpent = +(wSpent + 0.49).toFixed(2); wCount++; updateWeatherStats();
+    });
+  } else if (type === 'all') {
+    openModal('Unlock all 5 days of forecast', '5-day forecast', 2.50, () => {
+      for (let i = 0; i < 5; i++) wUnlocked[i] = true;
+      buildWeather(); wSpent = +(wSpent + 2.50).toFixed(2); wCount += 5; updateWeatherStats();
+    });
+  } else {
+    openModal(`Unlock ${DAYS[type]} forecast<br><span class="hidden">${ICONS[type]} ${TEMPS[type]}</span>`, `${DAYS[type]} forecast`, 0.50, () => {
+      wUnlocked[type] = true; buildWeather(); wSpent = +(wSpent + 0.50).toFixed(2); wCount++; updateWeatherStats();
+    });
+  }
+}
+function updateWeatherStats() {
+  document.getElementById('weather-spent').textContent = '$' + wSpent.toFixed(2) + ' spent';
+  document.getElementById('weather-count').textContent = wCount + ' unlock' + (wCount !== 1 ? 's' : '');
+}
+
+let pwCurrent = '', pwSpent = 0, pwCount = 0;
+const CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+function pwGenerate() {
+  pwCurrent = Array.from({ length: 16 }, () => CHARS[Math.floor(Math.random() * CHARS.length)]).join('');
+  const el = document.getElementById('pw-display');
+  el.textContent = '••••••••••••••••';
+  el.className = 'pw-display blurred';
+  const bars = document.getElementById('pw-strength');
+  bars.innerHTML = '';
+  for (let i = 0; i < 5; i++) bars.innerHTML += '<div class="pw-bar on"></div>';
+}
+function pwPay() {
+  if (!pwCurrent) pwGenerate();
+  openModal('Your secure password is ready.<br><span class="hidden" style="font-family:monospace;">████████████████</span>', 'Password reveal', 0.50, () => {
+    const el = document.getElementById('pw-display');
+    el.textContent = pwCurrent; el.className = 'pw-display revealed';
+    pwSpent = +(pwSpent + 0.50).toFixed(2); pwCount++;
+    document.getElementById('pw-spent').textContent = '$' + pwSpent.toFixed(2) + ' spent';
+    document.getElementById('pw-count').textContent = pwCount + ' reveal' + (pwCount !== 1 ? 's' : '');
+  });
+}
+
+let coinResult = null, coinFlipped = false, coinSpent = 0, coinCount = 0;
+function coinFlip() {
+  coinResult = Math.random() < 0.5 ? 'Heads' : 'Tails';
+  coinFlipped = true;
+  const coin = document.getElementById('coin');
+  coin.classList.add('flipping');
+  document.getElementById('coin-result').style.filter = 'blur(6px)';
+  document.getElementById('coin-result').textContent = '?';
+  setTimeout(() => { coin.classList.remove('flipping'); coin.textContent = '🪙'; }, 700);
+}
+function coinPay() {
+  if (!coinFlipped) { coinFlip(); setTimeout(() => coinPay(), 800); return; }
+  openModal('Your coin flip result is ready.<br><span class="hidden" style="font-size:24px;font-weight:800;">████████</span>', 'Flip result', 0.10, () => {
+    document.getElementById('coin-result').style.filter = 'none';
+    document.getElementById('coin-result').textContent = coinResult;
+    coinFlipped = false; coinSpent = +(coinSpent + 0.10).toFixed(2); coinCount++;
+    document.getElementById('coin-spent').textContent = '$' + coinSpent.toFixed(2) + ' spent';
+    document.getElementById('coin-count').textContent = coinCount + ' flip' + (coinCount !== 1 ? 's' : '') + ' revealed';
+  });
+}
+
+let sortSpent = 0, sortCount = 0, sortedList = [];
+function sortPreview() {
+  const lines = document.getElementById('sort-input').value.split('\n').map((l) => l.trim()).filter((l) => l);
+  const n = Math.max(lines.length, 10);
+  const price = (n * 0.05).toFixed(2);
+  document.getElementById('sort-count').textContent = `${lines.length} item${lines.length !== 1 ? 's' : ''} · $${price} (min $0.50)`;
+  document.getElementById('sort-price').textContent = '$' + price;
+  sortedList = [...lines].sort((a, b) => a.localeCompare(b));
+  const preview = document.getElementById('sort-preview');
+  preview.textContent = sortedList.length ? sortedList.join('\n') : 'Your sorted list will appear here.';
+  preview.className = 'sort-preview blurred';
+}
+function sortPay() {
+  const lines = document.getElementById('sort-input').value.split('\n').map((l) => l.trim()).filter((l) => l);
+  if (lines.length === 0) return;
+  const n = Math.max(lines.length, 10);
+  const price = +(n * 0.05).toFixed(2);
+  sortedList = [...lines].sort((a, b) => a.localeCompare(b));
+  openModal(`Sort ${lines.length} item${lines.length !== 1 ? 's' : ''} alphabetically<br><span class="hidden">${sortedList.slice(0, 3).join(', ')}...</span>`, `Sort ${lines.length} items`, price, () => {
+    const preview = document.getElementById('sort-preview');
+    preview.textContent = sortedList.join('\n');
+    preview.className = 'sort-preview';
+    sortSpent = +(sortSpent + price).toFixed(2); sortCount++;
+    document.getElementById('sort-spent').textContent = '$' + sortSpent.toFixed(2) + ' spent';
+    document.getElementById('sort-count2').textContent = sortCount + ' sort' + (sortCount !== 1 ? 's' : '');
+  });
+}
+
+pwGenerate();
+buildWeather();
+calcRender();
+sortPreview();
+</script>
+</body>
 </html>

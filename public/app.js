@@ -233,5 +233,76 @@ cancelBtn.addEventListener("click", () => {
   render();
 });
 
+function isTypingIntoField(target) {
+  if (!target) return false;
+  const tag = target.tagName;
+  return tag === "INPUT" || tag === "TEXTAREA" || target.isContentEditable;
+}
+
+window.addEventListener("keydown", (event) => {
+  if (isTypingIntoField(event.target)) return;
+
+  const key = event.key;
+  const digit = Number(key);
+
+  if (Number.isInteger(digit) && digit >= 0 && digit <= 9) {
+    event.preventDefault();
+    inputDigit(digit);
+    return;
+  }
+
+  if (key === ".") {
+    event.preventDefault();
+    inputDecimal();
+    return;
+  }
+
+  if (key === "+" || key === "-") {
+    event.preventDefault();
+    performOp(key);
+    return;
+  }
+
+  if (key === "*" || key.toLowerCase() === "x") {
+    event.preventDefault();
+    performOp("×");
+    return;
+  }
+
+  if (key === "/") {
+    event.preventDefault();
+    performOp("÷");
+    return;
+  }
+
+  if (key === "Enter" || key === "=") {
+    event.preventDefault();
+    handleEquals();
+    return;
+  }
+
+  if (key === "Backspace") {
+    event.preventDefault();
+    if (state.waiting || state.paid) return;
+    if (state.display.length <= 1 || (state.display.length === 2 && state.display.startsWith("-"))) {
+      state.display = "0";
+    } else {
+      state.display = state.display.slice(0, -1);
+    }
+    render();
+    return;
+  }
+
+  if (key === "Escape") {
+    event.preventDefault();
+    if (state.showPaywall && !state.processing) {
+      state.showPaywall = false;
+      render();
+      return;
+    }
+    clearCalc();
+  }
+});
+
 applyPaidResultFromReturn();
 render();

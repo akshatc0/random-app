@@ -91,6 +91,11 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    if (req.method === "GET" && reqUrl.pathname === "/logo.png") {
+      serveStatic(res, "logo.png", "image/png");
+      return;
+    }
+
     if (req.method === "POST" && reqUrl.pathname === "/api/create-checkout-session") {
       if (!STRIPE_SECRET_KEY) {
         sendJson(res, 500, { error: "Missing STRIPE_SECRET_KEY in environment." });
