@@ -11,12 +11,14 @@
   body{background:var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,-apple-system,sans-serif;min-height:100vh;overflow-x:hidden;}
 
   nav{display:none;}
+  .top-back{position:fixed;top:14px;left:14px;z-index:250;background:#111;border:1px solid #222;color:#bbb;border-radius:10px;padding:8px 12px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:none;}
+  .top-back:hover{color:#fff;border-color:#333;}
   .page{display:none;min-height:100vh;padding-top:0;}
   .page.active{display:flex;flex-direction:column;align-items:center;}
 
   #home{align-items:center;justify-content:center;}
   .home-inner{width:100%;max-width:420px;padding:40px 24px;}
-  .home-tag{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;text-align:center;}
+  .home-tag{display:none;}
   .nav-list{list-style:none;width:100%;}
   .nav-list li{border-top:1px solid var(--border);cursor:pointer;}
   .nav-list li:last-child{border-bottom:1px solid var(--border);}
@@ -102,6 +104,7 @@
 </style>
 </head>
 <body>
+<button class="top-back" id="top-back-btn" onclick="showPage('home')">← back</button>
 
 <nav>
   <div class="logo">expensive<span>.solutions</span></div>
@@ -110,7 +113,6 @@
 <div id="home" class="page active">
   <div class="product-page">
     <div class="home-inner">
-      <div class="home-tag">The internet's finest paid answers</div>
       <ul class="nav-list">
         <li onclick="showPage('calcpay')"><a><span class="nav-item-name"><span class="top">CalcPay</span><span class="btm">CalcPay</span></span></a></li>
         <li onclick="showPage('timepay')"><a><span class="nav-item-name"><span class="top">TimePay</span><span class="btm">TimePay</span></span></a></li>
@@ -277,6 +279,8 @@ let pendingPurchase = null;
 function showPage(id) {
   document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
+  const backBtn = document.getElementById("top-back-btn");
+  backBtn.style.display = id === "home" ? "none" : "inline-flex";
   window.scrollTo(0, 0);
 }
 
